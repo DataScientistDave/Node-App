@@ -1,0 +1,27 @@
+name: Release
+
+# These jobs will run on push to main or a merge to main
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+# Build is the name of the job. Can call it whatever we want
+  deploy:
+
+    # Runs on a server hosted by GitHub
+    runs-on: ubuntu-latest
+
+    # Steps that we need to take to run the jobs correctly
+    steps:
+      # uses means that it is using actions from the community. Checkouts into the branch we created the PR in.
+    - uses: actions/checkout@v2
+    - name: Build and Push Docker Image
+      # Using one from community
+      uses: mr-smithers-excellent/docker-build-push@v5
+      with:
+        # Need to tag with same repo name on Docker Hub
+        image: dave360/nest-app
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
